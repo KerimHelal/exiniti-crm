@@ -16,7 +16,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { register, logout, getUserRole } from '../methods/auth';
+import { register, logout, getUserRole, getCurrentUser } from '../methods/auth';
 import { getAllUsers, deleteUser, updateUser } from '../methods/users';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,7 +48,7 @@ const AdminDashboard = (props) => {
 
 
     React.useEffect(() => {
-        if(getUserRole() !== 'superAdmin') {
+        if(!getCurrentUser() || getUserRole() !== 'superAdmin') {
             logout();
             props.history.push('/');
         }
@@ -74,6 +74,9 @@ const AdminDashboard = (props) => {
                     email: '',
                     password: '',
                     name: ''
+                });
+                getAllUsers().then(response => {
+                    setUsers(response);
                 });
             },
             (error) => {
@@ -174,7 +177,7 @@ const AdminDashboard = (props) => {
                     </Table>
                 </TableContainer>
             </div>
-            <Button onClick={() => logout()}>Logout</Button>
+            <Button onClick={() => { logout(); props.history.push('/') }}>Logout</Button>
             <Dialog open={modalOpened} onClose={() => setModalOpened(false)} >
                 <DialogTitle id="form-dialog-title">Update User</DialogTitle>
                 <DialogContent>

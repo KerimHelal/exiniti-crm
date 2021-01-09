@@ -17,7 +17,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { getAllLeads, deleteLead, updateLead, insertLead } from '../methods/leads';
-import { getUserRole, logout } from '../methods/auth';
+import { getUserRole, logout, getCurrentUser} from '../methods/auth';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -48,7 +48,8 @@ const StaffDashBoard = (props) => {
 
 
     React.useEffect(() => {
-        if(getUserRole() !== 'staff') {
+        console.log(getCurrentUser())
+        if(!getCurrentUser() || getUserRole() !== 'staff') {
             logout();
             props.history.push('/');
         }
@@ -75,9 +76,18 @@ const StaffDashBoard = (props) => {
                     phone: '',
                     name: ''
                 });
+                getAllLeads().then(response => {
+                    setLeads(response);
+                });
             },
             (error) => {
-                Alert.error(error);
+                const errorMessage =
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+                error.message ||
+                error.toString();
+               Alert.error(errorMessage);
             });
         } else {
             Alert.error("Please fill all of the fields");
@@ -130,7 +140,7 @@ const StaffDashBoard = (props) => {
                         value={newLead.phone}
                         margin="normal"
                         onChange={handleChange}
-                        label="Password"
+                        label="Phone"
                     /> &nbsp;&nbsp;
                      <Button
                         type="submit"
@@ -170,6 +180,7 @@ const StaffDashBoard = (props) => {
                     </Table>
                 </TableContainer>
             </div>
+            <Button onClick={() => { logout(); props.history.push('/') }}>Logout</Button>
             <Dialog open={modalOpened} onClose={() => setModalOpened(false)} >
                 <DialogTitle id="form-dialog-title">Update User</DialogTitle>
                 <DialogContent>

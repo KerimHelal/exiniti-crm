@@ -20,7 +20,7 @@ exports.insertLead = (req, res) => {
     });
   
   
-    lead.save((err, user) => {
+    lead.save((err, lead) => {
       if (err) {
         res.status(500).send({ message: err });
         return;
