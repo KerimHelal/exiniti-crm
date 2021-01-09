@@ -11,7 +11,6 @@ export const getAllLeads = () => {
 export const insertLead = (name, phone, email) => {
     return axios.post('http://localhost:8080/leads/insert', { name, phone, email })
     .then(response => {
-      console.log(response.data.message)
       return response.data.message;
     });
 }

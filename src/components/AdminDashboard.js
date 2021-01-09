@@ -77,7 +77,13 @@ const AdminDashboard = (props) => {
                 });
             },
             (error) => {
-                Alert.error(error);
+                const errorMessage =
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+                error.message ||
+                error.toString();
+              Alert.error(errorMessage);
             });
         } else {
             Alert.error("Please fill all of the fields");

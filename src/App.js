@@ -6,7 +6,6 @@ import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import { Switch, Route } from "react-router-dom";
-import { getCurrentUser, getUserRole } from "./methods/auth";
 
 const App = () => {
 

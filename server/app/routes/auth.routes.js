@@ -9,7 +9,7 @@ module.exports = app => {
     );
     next();
   });
-
+  app.use('/auth/register', verifyRegister.checkIfEmailExists);
   app.post('/auth/register', authController.register);
   app.post('/auth/login', authController.login);
 };

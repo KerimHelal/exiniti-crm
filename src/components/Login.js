@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { login, getUserRole } from '../methods/auth';
+import { login, getUserRole, getCurrentUser } from '../methods/auth';
 import Alert from 'react-s-alert';
 
 const useStyles = makeStyles((theme) => ({
@@ -32,6 +32,16 @@ const Login = (props) => {
         password: '',
       });
 
+    React.useEffect(() => {
+      if(getCurrentUser()) {
+        if(getUserRole() === 'staff') {
+            props.history.push('/staff');
+        } else if(getUserRole() === 'superAdmin') {
+          props.history.push('/admin');
+        }
+      } 
+    }, []);
+
     const handleChange = (e) => {
         setState({
             ...state,
@@ -52,14 +62,12 @@ const Login = (props) => {
               }
             },
             (error) => {
-                //fix this
               const errorMessage =
                 (error.response &&
                   error.response.data &&
                   error.response.data.message) ||
                 error.message ||
                 error.toString();
-    
               Alert.error(errorMessage);
             }
           );

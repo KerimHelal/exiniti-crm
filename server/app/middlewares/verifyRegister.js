@@ -5,7 +5,6 @@ exports.checkIfEmailExists = (req, res, next) => {
     email: req.body.email
   }).exec((err, user) => {
     if (err) {
-      console.log(err);
       res.status(500).send({ message: err });
       return;
     }
@@ -13,6 +12,7 @@ exports.checkIfEmailExists = (req, res, next) => {
       res.status(400).send({ message: "An account with this email is already registerd." });
       return;
     }
+    next();
   });
 };
 

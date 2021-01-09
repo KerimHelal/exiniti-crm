@@ -3,7 +3,6 @@ import axios from 'axios';
 export const register = (email, password, name) => {
     return axios.post('http://localhost:8080/auth/register', { email, password, name })
     .then(response => {
-      console.log(response.data.message)
       return response.data.message;
     });
 }
